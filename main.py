@@ -6,7 +6,13 @@ from time import timedef cache_decorator(func):
             cache[args] = {'result': result, 'time': time()} # сохранения результатов вычисления функции и текущего времени в кэш            print('Результат взят из рассчитанной функции и сохранен в кэш')
             return result
     return wrapper
-@cache_decoratordef sum(a, b):
+@cache_decorator
+def sum(a, b):
     return a + b
+
+@cache_decorator
+def mult(a, b):
+    return a * b
+
 while True:    a = int(input('Введите а:'))
     b = int(input('Введите b:')) # если думать дольше 15 сек над вводом - результат будет условно удален из кэша    print(f"Сумма {a} + {b} = {sum(a, b)}") # вызываем расчет, который с помощью декоратора либо вычисляется функцией
