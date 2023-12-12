@@ -1,12 +1,39 @@
-from time import timedef cache_decorator(func):
-    time_save = 15    cache = {}
-    def wrapper(*args):        if args in cache and time() <= cache[args]['time'] + time_save: # проверка есть ли в кэше результат с данными параметрами и прошло ли заданное в начале время хранения
-            print('Результат взят из кэша')            return cache[args]['result']
-        else:            result = func(*args) # запуска расчетов с помощью функции
-            cache[args] = {'result': result, 'time': time()} # сохранения результатов вычисления функции и текущего времени в кэш            print('Результат взят из рассчитанной функции и сохранен в кэш')
+from time import time
+
+def cache_decorator(func):
+    time_save = 15
+    cache = {}
+
+    def wrapper(*args):
+        if args in cache and time() <= cache[args]['time'] + time_save:
+            print('Результат взят из кэша')
+            print(f'Время хранения: {round(abs(cache[args]["time"] - time()), 2)}')
+            return cache[args]['result']
+        else:
+            result = func(*args)
+            cache[args] = {'result': result, 'time': time()}
+            print(f'Результат взят из рассчитанной функции {func.__name__} и сохранен в кэш')
             return result
+
     return wrapper
-@cache_decoratordef sum(a, b):
+
+@cache_decorator
+def sum_func(a, b):
     return a + b
-while True:    a = int(input('Введите а:'))
-    b = int(input('Введите b:')) # если думать дольше 15 сек над вводом - результат будет условно удален из кэша    print(f"Сумма {a} + {b} = {sum(a, b)}") # вызываем расчет, который с помощью декоратора либо вычисляется функцией
+
+@cache_decorator
+def mult_func(a, b):
+    return a * b
+
+while True:
+    a = int(input('Введите а:'))
+    b = int(input('Введите b:'))
+
+    print(f"Функция суммирования: {a} + {b} = {sum_func(a, b)}")
+
+    a = int(input('Введите а:'))
+    b = int(input('Введите b:'))
+
+    print(f"Функция произведения: {a} * {b} = {mult_func(a, b)}")
+
+
