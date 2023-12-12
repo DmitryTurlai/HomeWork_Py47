@@ -6,6 +6,7 @@ from time import timedef cache_decorator(func):
             cache[args] = {'result': result, 'time': time()} # сохранения результатов вычисления функции и текущего времени в кэш            print('Результат взят из рассчитанной функции и сохранен в кэш')
             return result
     return wrapper
+
 @cache_decorator
 def sum(a, b):
     return a + b
